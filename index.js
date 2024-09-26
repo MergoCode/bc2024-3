@@ -1,10 +1,10 @@
- const { program } = require('commander');
- const fs  =  require('fs');
- const path = require('path');
- 
- program
-    .requiredOption('-i, --input <path>', 'Шлях до файлу вводу(обов`язковий)')
-    .option('-o, --output <path>',  "Шлях до файлу виводу(необов'язковий)")
+const { program } = require('commander');
+const fs = require('fs');
+const path = require('path');
+
+program
+    .requiredOption('-i, --input <path>', 'Шлях до файлу вводу (обов`язковий)')
+    .option('-o, --output <path>', "Шлях до файлу виводу (необов`язковий)")
     .option('-d, --display', "Виведення результату в консоль");
 
 program.parse(process.argv);
@@ -16,7 +16,7 @@ if (!options.input) {
     process.exit(1);
 }
 
-if (!fs.existsSync(options.input)){
+if (!fs.existsSync(options.input)) {
     console.error("Cannot find the input file");
     process.exit(1);
 }
@@ -32,17 +32,21 @@ try {
     process.exit(1);
 }
 
-const result = JSON.stringify(parsedData, null, 2);
 
+const filteredData = parsedData.filter(field => field.value > 5);
 
+if (filteredData.length === 0) {
+    console.warn("Не знайдено жодного об'єкта, що задовольняє умови фільтрації.");
+}
+
+const result = JSON.stringify(filteredData, null, 2);
 
 if (options.display) {
-    console.log(result);
+    console.log("Відфільтровані дані:", result);
 }
 
 if (options.output) {
     const outputFilePath = path.resolve(options.output);
     fs.writeFileSync(outputFilePath, result, 'utf-8');
-
+    console.log(`Фільтровані дані збережено у файл: ${outputFilePath}`);
 }
-
