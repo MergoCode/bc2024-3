@@ -2,12 +2,28 @@ const { program } = require('commander');
 const fs = require('fs');
 const path = require('path');
 
+
+program.configureOutput({
+    outputError: (str, write) => {
+      if (str.includes("option '-i, --input <path>' argument missing")) {
+        write("Please, specify input file");
+      } else {
+        write(str);
+      }
+    },
+  });
+
 program
     .requiredOption('-i, --input <path>', 'Шлях до файлу вводу (обов`язковий)')
     .option('-o, --output <path>', "Шлях до файлу виводу (необов`язковий)")
     .option('-d, --display', "Виведення результату в консоль");
 
+
+
+
+
 program.parse(process.argv);
+
 
 const options = program.opts();
 
@@ -33,7 +49,7 @@ try {
 }
 
 
-const filteredData = parsedData.filter(field => field.value > 5);
+const filteredData = parsedData.filter(field => field.value > 5 && field.ku > 13);
 
 if (filteredData.length === 0) {
     console.warn("Не знайдено жодного об'єкта, що задовольняє умови фільтрації.");
