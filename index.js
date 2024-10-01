@@ -49,13 +49,13 @@ try {
 }
 
 
-const filteredData = parsedData.filter(field => field.value > 5 && field.ku > 13);
+const filteredData = parsedData.filter(field => field.value > 5 && field.ku == 13);
 
 if (filteredData.length === 0) {
     console.warn("Не знайдено жодного об'єкта, що задовольняє умови фільтрації.");
 }
-
-const result = JSON.stringify(filteredData, null, 2);
+const resultValues = filteredData.map(item => item.value);
+const result = JSON.stringify(resultValues, null, 2);
 
 if (options.display) {
     console.log("Відфільтровані дані:", result);
